@@ -1,0 +1,24 @@
+{
+  "name": "evo-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec node --env-file=.env.local -r @swc-node/register src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/node": "^20.11.18",
+    "nodemon": "^3.0.3",
+    "prettier": "^3.2.5",
+    "swc": "^1.0.11",
+    "swc-node": "^1.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1"
+  }
+}
