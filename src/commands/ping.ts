@@ -1,22 +1,14 @@
 import { CommandInteraction } from 'discord.js'
 
-import { EvolutionClient } from '@/client'
 import { CommandHandler } from '@/structures/command'
 
 export default class PingCommand extends CommandHandler {
-  constructor(client: EvolutionClient) {
-    super({
-      name: 'ping',
-      description: 'ping server'
-    })
-  }
+  public readonly name = 'ping'
+  public readonly description = 'ping server ms'
 
-  public async execute(
-    client: EvolutionClient,
-    interaction: CommandInteraction
-  ) {
+  async execute(interaction: CommandInteraction) {
     interaction.reply({
-      content: `O ping do bot é \`${client.ws.ping}\`ms.`,
+      content: `O ping do bot é \`${this.client.ws.ping}\`ms.`,
       ephemeral: true
     })
   }

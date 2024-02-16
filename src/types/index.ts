@@ -1,6 +1,11 @@
-import type { ClientEvents as DiscordClientEvents } from 'discord.js'
+import type {
+  CommandInteraction,
+  ClientEvents as DiscordClientEvents
+} from 'discord.js'
 
-export type ClientEvents = DiscordClientEvents
+export type ClientEvents = DiscordClientEvents & {
+  interactionCreate: [interaction: CommandInteraction]
+}
 
 export enum Events {
   ApplicationCommandPermissionsUpdate = 'applicationCommandPermissionsUpdate',

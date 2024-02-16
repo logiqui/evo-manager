@@ -1,35 +1,28 @@
 import { colorize } from 'consola/utils'
-import { ClientEvents } from 'discord.js'
+import { Client } from 'discord.js'
 
-import { EvolutionClient } from '@/client'
 import { EventHandler } from '@/structures/event'
+import { Events } from '@/types'
 
-export default class ReadyEvent extends EventHandler {
-  constructor() {
-    super({
-      name: 'ready',
-      once: true
-    })
-  }
+export default class ReadyEvent extends EventHandler<Events.Ready> {
+  public readonly name = Events.Ready
+  public readonly once = true
 
-  public async execute(
-    client: EvolutionClient,
-    _clientEvent: ClientEvents['ready']
-  ) {
-    await client.registryCommands()
+  async execute(_client: Client<true>) {
+    this.client.registryCommands()
 
-    client.logger.box({
+    this.logger.box({
       title: ` ${colorize('redBright', 'Evolution Bot Manager')} `,
       message: [
-        `${colorize('redBright', client.user!.tag)} with id ${colorize('redBright', client.user!.id)}\n`,
+        `${colorize('redBright', this.client.user!.tag)} with id ${colorize('redBright', this.client.user!.id)}\n`,
         `${colorize(
           'redBright',
-          client.guilds.cache
+          this.client.guilds.cache
             .map((guild) => guild.memberCount)
             .reduce((total, count) => total + count, 0)
-        )} users in ${colorize('redBright', client.guilds.cache.size)} servers`,
-        `${colorize('redBright', client.events.size)} events loaded successfully`,
-        `${colorize('redBright', client.commands.size)} commands loaded successfully`
+        )} users in ${colorize('redBright', this.client.guilds.cache.size)} servers`,
+        `${colorize('redBright', this.client.events.size)} events loaded successfully`,
+        `${colorize('redBright', this.client.commands.size)} commands loaded successfully`
       ].join('\n')
     })
   }

@@ -1,22 +1,18 @@
-import { ClientEvents } from 'discord.js'
+import type { ConsolaInstance } from 'consola'
 
 import { EvolutionClient } from '@/client'
+import { ClientEvents } from '@/types'
 
-export type EventType = keyof ClientEvents
+export abstract class EventHandler<
+  T extends keyof ClientEvents = keyof ClientEvents
+> {
+  public abstract readonly name: T
+  public readonly once: boolean = false
 
-export type EventOptions = {
-  name: EventType
-  once?: boolean
-}
+  constructor(
+    protected client: EvolutionClient,
+    protected logger: ConsolaInstance
+  ) {}
 
-export class EventHandler {
-  name: string
-  once?: boolean
-
-  constructor(options: EventOptions) {
-    this.name = options.name
-    this.once = options.once
-  }
-
-  public async execute(client: EvolutionClient, ...args: any[]) {}
+  async execute(...args: ClientEvents[T]) {}
 }

@@ -1,3 +1,4 @@
+import type { ConsolaInstance } from 'consola'
 import type {
   ApplicationCommandOptionData,
   CommandInteraction
@@ -13,23 +14,17 @@ export interface CommandArgs {
   permissions?: string[]
 }
 
-export class CommandHandler {
-  name: string
-  description: string
-  options?: ApplicationCommandOptionData[]
-  developerOnly?: boolean
-  permissions?: string[]
+export abstract class CommandHandler {
+  public abstract readonly name: string
+  public abstract readonly description: string
+  public readonly options: ApplicationCommandOptionData[] = []
+  public readonly developerOnly: boolean = false
+  public readonly permissions: string[] = []
 
-  constructor(options: CommandArgs) {
-    this.name = options.name
-    this.description = options.description
-    this.options = options.options
-    this.developerOnly = options.developerOnly
-    this.permissions = options.permissions
-  }
-
-  public async execute(
-    client: EvolutionClient,
-    interaction: CommandInteraction
+  constructor(
+    protected client: EvolutionClient,
+    protected logger: ConsolaInstance
   ) {}
+
+  async execute(interaction: CommandInteraction) {}
 }

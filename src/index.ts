@@ -2,12 +2,14 @@ import { IntentsBitField } from 'discord.js'
 
 import { EvolutionClient } from '@/client'
 
-const client = new EvolutionClient({
-  intents: [
-    IntentsBitField.Flags.Guilds,
-    IntentsBitField.Flags.GuildMembers,
-    IntentsBitField.Flags.GuildMessages
-  ]
-})
+;(async () => {
+  const client = new EvolutionClient({
+    intents: [
+      IntentsBitField.Flags.Guilds,
+      IntentsBitField.Flags.GuildMembers,
+      IntentsBitField.Flags.GuildMessages
+    ]
+  })
 
-client.init()
+  await client.boot()
+})()
