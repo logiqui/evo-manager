@@ -1,18 +1,27 @@
-import { Client, ClientOptions, Collection } from 'discord.js'
+import { type ConsolaInstance, createConsola } from 'consola'
+import { Client, ClientEvents, ClientOptions, Collection } from 'discord.js'
 import { readdirSync } from 'fs'
 import { join } from 'path'
 
-import { Command } from '@/structures/command'
+import { CommandHandler } from '@/structures/command'
+import { EventHandler } from '@/structures/event'
 
 export class EvolutionClient extends Client {
-  commands: Collection<string, Command>
-  events: Collection<string, Event>
+  commands: Collection<string, CommandHandler>
+  events: Collection<string, EventHandler>
+  logger: ConsolaInstance
 
   constructor(options: ClientOptions) {
     super(options)
 
     this.commands = new Collection()
     this.events = new Collection()
+    this.logger = createConsola({
+      formatOptions: {
+        columns: 80,
+        date: true
+      }
+    })
 
     this.loadCommands()
     this.loadEvents()
@@ -38,7 +47,7 @@ export class EvolutionClient extends Client {
     for (const command of commands) {
       import(join(process.cwd(), `${path}/${command}`)).then(
         ({ default: classEvent }) => {
-          const handler = new classEvent(this)
+          const handler: CommandHandler = new classEvent()
 
           this.commands.set(handler.name, handler)
         }
@@ -52,10 +61,15 @@ export class EvolutionClient extends Client {
     for (const event of events) {
       import(join(process.cwd(), `${path}/${event}`)).then(
         ({ default: classEvent }) => {
-          const handler = new classEvent(this)
+          const handler: EventHandler = new classEvent()
+          const handlerName = handler.name as keyof ClientEvents
 
+          handler.once
+            ? this.once(handlerName, (...args) =>
+                handler.execute(this, ...args)
+              )
+            : this.on(handlerName, (...args) => handler.execute(this, ...args))
           this.events.set(handler.name, handler)
-          this.on(handler.name, handler.run)
         }
       )
     }
@@ -67,7 +81,7 @@ export class EvolutionClient extends Client {
   }
 }
 
-function toApplicationCommand(collection: Collection<string, Command>) {
+function toApplicationCommand(collection: Collection<string, CommandHandler>) {
   return collection.map((s) => {
     return { name: s.name, description: s.description, options: s.options }
   })
