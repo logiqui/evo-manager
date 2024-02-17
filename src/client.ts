@@ -1,10 +1,10 @@
-import { type ConsolaInstance, createConsola } from 'consola'
+import { createConsola } from 'consola'
 import { Client, ClientOptions, Collection } from 'discord.js'
 import { readdirSync } from 'fs'
 import { join } from 'path'
 
-import { CommandHandler } from '@/structures/command'
-import { EventHandler } from '@/structures/event'
+import { CommandHandler } from '@/handlers/command'
+import { EventHandler } from '@/handlers/event'
 
 export class EvolutionClient extends Client {
   public readonly commands = new Collection<string, CommandHandler>()

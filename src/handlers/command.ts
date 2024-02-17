@@ -15,8 +15,8 @@ export interface CommandArgs {
 }
 
 export abstract class CommandHandler {
-  public abstract readonly name: string
-  public abstract readonly description: string
+  public readonly name: string = ''
+  public readonly description: string = ''
   public readonly options: ApplicationCommandOptionData[] = []
   public readonly developerOnly: boolean = false
   public readonly permissions: string[] = []

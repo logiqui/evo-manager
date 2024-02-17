@@ -1,8 +1,8 @@
 import { colorize } from 'consola/utils'
 import { Client } from 'discord.js'
 
-import { EventHandler } from '@/structures/event'
-import { Events } from '@/types'
+import { EventHandler } from '@/handlers/event'
+import { Events } from '@/lib/types'
 
 export default class ReadyEvent extends EventHandler<Events.Ready> {
   public readonly name = Events.Ready

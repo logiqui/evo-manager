@@ -1,6 +1,6 @@
 import { CommandInteraction } from 'discord.js'
 
-import { CommandHandler } from '@/structures/command'
+import { CommandHandler } from '@/handlers/command'
 
 export default class PingCommand extends CommandHandler {
   public readonly name = 'ping'
