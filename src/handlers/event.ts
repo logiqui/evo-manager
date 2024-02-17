@@ -14,5 +14,5 @@ export abstract class EventHandler<
     protected logger: ConsolaInstance
   ) {}
 
-  async execute(...args: ClientEvents[T]) {}
+  abstract execute(...args: ClientEvents[T]): Promise<void>
 }

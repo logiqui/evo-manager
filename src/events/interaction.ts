@@ -12,10 +12,6 @@ export default class InteractionCreateEvent extends EventHandler<Events.Interact
       return
     }
 
-    if (command.developerOnly && interaction.user.id !== '244265165929971713') {
-      // return interaction.deferReply()
-    }
-
     await command.execute(interaction)
   }
 }
