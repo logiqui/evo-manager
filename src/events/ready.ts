@@ -1,8 +1,8 @@
 import { centerAlign, colorize, stripAnsi } from 'consola/utils'
 import { Client } from 'discord.js'
 
+import { Events } from '@/core/types'
 import { EventHandler } from '@/handlers/event'
-import { Events } from '@/lib/types'
 
 export default class ReadyEvent extends EventHandler<Events.Ready> {
   public readonly name = Events.Ready

@@ -6,7 +6,7 @@ import {
   type InteractionEditReplyOptions
 } from 'discord.js'
 
-import { EvolutionClient } from '@/client'
+import { EvolutionClient } from '@/core/client'
 
 type DeferReplyOptions =
   | (InteractionEditReplyOptions & { ephemeral?: boolean })

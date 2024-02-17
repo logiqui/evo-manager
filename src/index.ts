@@ -1,6 +1,6 @@
 import { IntentsBitField } from 'discord.js'
 
-import { EvolutionClient } from '@/client'
+import { EvolutionClient } from '@/core/client'
 
 ;(async () => {
   const client = new EvolutionClient({

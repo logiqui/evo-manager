@@ -1,7 +1,7 @@
 import type { ConsolaInstance } from 'consola'
 
-import { EvolutionClient } from '@/client'
-import { ClientEvents } from '@/lib/types'
+import { EvolutionClient } from '@/core/client'
+import { ClientEvents } from '@/core/types'
 
 export abstract class EventHandler<
   T extends keyof ClientEvents = keyof ClientEvents

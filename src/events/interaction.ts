@@ -1,7 +1,7 @@
 import { CommandInteraction } from 'discord.js'
 
+import { Events } from '@/core/types'
 import { EventHandler } from '@/handlers/event'
-import { Events } from '@/lib/types'
 
 export default class InteractionCreateEvent extends EventHandler<Events.InteractionCreate> {
   public readonly name = Events.InteractionCreate
