@@ -1,10 +1,11 @@
 import { createConsola } from 'consola'
 import { Client, ClientOptions, Collection } from 'discord.js'
-import { readdirSync } from 'fs'
-import { join } from 'path'
+import path from 'path'
 
 import { CommandHandler } from '@/handlers/command'
 import { EventHandler } from '@/handlers/event'
+
+import { iterateDirectoryRecursively, toApplicationCommand } from './utils'
 
 export class EvolutionClient extends Client {
   public readonly commands = new Collection<string, CommandHandler>()
@@ -33,34 +34,37 @@ export class EvolutionClient extends Client {
     }
   }
 
-  async loadCommands(path: string = 'src/commands') {
-    const commands = readdirSync(path).filter((file) => file.endsWith('.ts'))
+  async loadCommands(filePath = path.resolve(__dirname, '../commands')) {
+    const commandFiles = await iterateDirectoryRecursively(filePath)
 
-    for (const command of commands) {
-      import(join(process.cwd(), `${path}/${command}`)).then(
-        ({ default: classCommand }) => {
-          const handler = new classCommand(this, this.logger)
+    for (const file of commandFiles) {
+      if (!file.endsWith('.ts')) {
+        continue
+      }
 
-          this.commands.set(handler.name, handler)
-        }
-      )
+      const { default: ClassCommand } = await import(file)
+      const handler = new ClassCommand(this, this.logger)
+
+      this.commands.set(handler.name, handler)
     }
   }
 
-  async loadEvents(path: string = 'src/events') {
-    const events = readdirSync(path).filter((file) => file.endsWith('.ts'))
+  async loadEvents(filePath = path.resolve(__dirname, '../events')) {
+    const eventFiles = await iterateDirectoryRecursively(filePath)
 
-    for (const event of events) {
-      import(join(process.cwd(), `${path}/${event}`)).then(
-        ({ default: classEvent }) => {
-          const handler = new classEvent(this, this.logger)
+    for (const file of eventFiles) {
+      if (!file.endsWith('.ts')) {
+        continue
+      }
 
-          handler.once
-            ? this.once(handler.name, (...args) => handler.execute(...args))
-            : this.on(handler.name, (...args) => handler.execute(...args))
-          this.events.set(handler.name, handler)
-        }
-      )
+      const { default: EventClass } = await import(file)
+      const handler = new EventClass(this, this.logger)
+
+      handler.once
+        ? this.once(handler.name, (...args) => handler.execute(...args))
+        : this.on(handler.name, (...args) => handler.execute(...args))
+
+      this.events.set(handler.name, handler)
     }
   }
 
@@ -72,10 +76,4 @@ export class EvolutionClient extends Client {
 
     return this
   }
-}
-
-function toApplicationCommand(collection: Collection<string, CommandHandler>) {
-  return collection.map((s) => {
-    return { name: s.name, description: s.description, options: s.options }
-  })
 }
