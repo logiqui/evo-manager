@@ -1,4 +1,4 @@
-import { colorize } from 'consola/utils'
+import { centerAlign, colorize, stripAnsi } from 'consola/utils'
 import { Client } from 'discord.js'
 
 import { EventHandler } from '@/handlers/event'
@@ -12,9 +12,11 @@ export default class ReadyEvent extends EventHandler<Events.Ready> {
     this.client.registryCommands()
 
     this.logger.box({
-      title: ` ${colorize('redBright', 'Evolution Bot Manager')} `,
+      title: centerAlign(
+        colorize('redBright', stripAnsi('Evolution Bot Manager')),
+        33
+      ),
       message: [
-        `${colorize('redBright', this.client.user!.tag)} with id ${colorize('redBright', this.client.user!.id)}\n`,
         `${colorize(
           'redBright',
           this.client.guilds.cache
