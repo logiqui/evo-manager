@@ -3,6 +3,7 @@ import { Client, ClientOptions, Collection } from 'discord.js'
 import path from 'path'
 
 import { CommandHandler } from '@/handlers/command'
+import { EmbedInteraction } from '@/handlers/embed'
 import { EventHandler } from '@/handlers/event'
 
 import { iterateDirectoryRecursively, toApplicationCommand } from './utils'
@@ -10,6 +11,7 @@ import { iterateDirectoryRecursively, toApplicationCommand } from './utils'
 export class EvolutionClient extends Client {
   public readonly commands = new Collection<string, CommandHandler>()
   public readonly events = new Collection<string, EventHandler>()
+  public readonly embeds = new EmbedInteraction()
   public readonly logger = createConsola({
     formatOptions: {
       columns: 10,
@@ -43,7 +45,7 @@ export class EvolutionClient extends Client {
       }
 
       const { default: ClassCommand } = await import(file)
-      const handler = new ClassCommand(this, this.logger)
+      const handler = new ClassCommand(this, this.logger, this.embeds)
 
       this.commands.set(handler.name, handler)
     }
@@ -58,7 +60,7 @@ export class EvolutionClient extends Client {
       }
 
       const { default: EventClass } = await import(file)
-      const handler = new EventClass(this, this.logger)
+      const handler = new EventClass(this, this.logger, this.embeds)
 
       handler.once
         ? this.once(handler.name, (...args) => handler.execute(...args))

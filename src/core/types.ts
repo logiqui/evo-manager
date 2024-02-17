@@ -1,7 +1,12 @@
 import type {
   CommandInteraction,
-  ClientEvents as DiscordClientEvents
+  ClientEvents as DiscordClientEvents,
+  InteractionEditReplyOptions
 } from 'discord.js'
+
+export type DeferReplyOptions =
+  | (InteractionEditReplyOptions & { ephemeral?: true })
+  | string
 
 export type ClientEvents = DiscordClientEvents & {
   interactionCreate: [interaction: CommandInteraction]
